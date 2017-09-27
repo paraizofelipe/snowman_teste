@@ -1,11 +1,12 @@
 import hug
 
 from snowman_teste import endpoints
+from snowman_teste import authentication
 
 
 # @hug.extend_api()
 def load_endpoints():
-    return [endpoints]
+    return [endpoints, authentication]
 
 
 if __name__ == '__main__':
