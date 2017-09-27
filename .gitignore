@@ -40,4 +40,4 @@ docs/_build
 output/
 
 # Data base
-db.json
+snowman.json

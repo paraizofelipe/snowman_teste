@@ -1,18 +1,14 @@
 import hug
 
-from snowman_teste import endpoints
-from snowman_teste import authentication
-
-
-# @hug.extend_api()
-def load_endpoints():
-    return [endpoints, authentication]
-
+from snowman_teste.resources.user import UserApi
+from snowman_teste.resources.tour_point import TourPointApi
 
 if __name__ == '__main__':
     api = hug.API(__name__)
     api.http.output_format = hug.output_format.pretty_json
 
-    hug.extend_api()(load_endpoints)
+    routes = hug.route.API(__name__)
+    routes.object(urls='/users')(UserApi)
+    routes.object(urls='/tour_points')(TourPointApi)
 
     api.http.serve()

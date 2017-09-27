@@ -9,3 +9,5 @@ googlemaps
 PyJWT
 marshmallow
 python-dateutil
+marshmallow-sqlalchemy
+SQLAlchemy
