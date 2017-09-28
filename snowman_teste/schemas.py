@@ -1,19 +1,29 @@
+from snowman_teste.models import User, Authenticator, TourPoint, Category, session
 from marshmallow import Schema, fields
+from marshmallow_sqlalchemy import ModelSchema
 
 
-class AuthenticatorSchema(Schema):
-    token_id = fields.Str()
-    salt = fields.Str()
+class AuthenticatorSchema(ModelSchema):
+    class Meta:
+        model = Authenticator
+        sql_session = session
 
 
-class TourPointSchema(Schema):
-    created_at = fields.DateTime()
-    distance = fields.Int()
+class CategorySchema(ModelSchema, Schema):
+    class Meta:
+        model = Category
+        sql_session = session
 
 
-class UserSchema(Schema):
-    created_at = fields.DateTime()
-    username = fields.Str()
-    password = fields.Str()
-    authenticator = fields.Nested(AuthenticatorSchema, many=False)
-    tour_points = fields.Nested(TourPointSchema, many=True)
+class TourPointSchema(ModelSchema, Schema):
+    class Meta:
+        model = TourPoint
+        category = fields.Nested(CategorySchema, many=True)
+        sql_session = session
+
+
+class UserSchema(ModelSchema):
+    class Meta:
+        model = User
+        sql_session = session
+
