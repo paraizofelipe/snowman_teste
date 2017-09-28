@@ -8,7 +8,7 @@ if __name__ == '__main__':
     api.http.output_format = hug.output_format.pretty_json
 
     routes = hug.route.API(__name__)
-    routes.object(urls='/users')(UserApi)
     routes.object(urls='/tour_points')(TourPointApi)
+    routes.object(urls='/users')(UserApi)
 
     api.http.serve()
