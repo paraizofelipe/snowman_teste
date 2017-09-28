@@ -2,60 +2,20 @@ import os
 import jwt
 import hashlib
 import datetime as dt
-from marshmallow import pprint
-from snowman_teste import schemas
 from snowman_teste.utils import hash_password
 from sqlalchemy import Column, create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, relationship, backref
+from sqlalchemy.orm import sessionmaker, relationship, scoped_session
 from sqlalchemy import ForeignKey, Integer, String, DateTime
 
 
-engine = create_engine("sqlite:///snowman.db", echo=True)
-session = sessionmaker()
-session.configure(bind=engine)
-db = session()
-
+engine = create_engine("sqlite:///snowman.db", echo=False)
+session = scoped_session(sessionmaker(bind=engine))
+# data_base = session()
 Base = declarative_base(engine)
 
 
-class ModelPattern:
-
-    def find_all(self):
-        try:
-            records = db.query(self.__class__).all()
-            return records
-        except Exception as error:
-            raise error
-
-    def find_by_id(self, id: int):
-        try:
-            record = db.query(self.__class__).filter_by(id=id).one()
-            return record
-        except Exception as error:
-            raise error
-
-    @staticmethod
-    def create(obj):
-        try:
-            db.add(obj)
-            db.commit()
-        except Exception as error:
-            raise error
-
-    def delete(self, id: int):
-        try:
-            record = self.find_by_id(id)
-            db.delete(record)
-            db.commit()
-        except Exception as error:
-            raise error
-
-    def update(self):
-        pass
-
-
-class Authenticator(Base, ModelPattern):
+class Authenticator(Base):
 
     __tablename__ = "TB_AUTH"
 
@@ -70,15 +30,15 @@ class Authenticator(Base, ModelPattern):
         self.salt = hashlib.sha512(str(os.urandom(64)).encode('utf-8')).hexdigest()
 
 
-class User(Base, ModelPattern):
+class User(Base):
 
     __tablename__ = "TB_USER"
 
     id = Column("ID", Integer, primary_key=True)
     created_at = Column("CREATED_AT", DateTime)
-    name = Column("USER_NAME", String(100))
-    email = Column("USER_EMAIL", String(100))
-    password = Column("USER_PASSWORD", String(100))
+    name = Column("USER_NAME", String)
+    email = Column("USER_EMAIL", String, unique=True)
+    password = Column("USER_PASSWORD", String)
 
     authenticator_id = Column("USER_AUTH_ID", Integer, ForeignKey('TB_AUTH.ID'))
     authenticator = relationship("Authenticator", uselist=False, back_populates="user")
@@ -93,44 +53,60 @@ class User(Base, ModelPattern):
         self.password = hash_password(password, self.authenticator.salt)
 
 
-# class Category(Base, ModelPattern):
-#
-#     __tablename_ = "TB_CATEGORY"
-#
-#     id = Column("ID", Integer, primary_key=True)
-#     name = Column("CATEGORY_NAME", String)
+class Category(Base):
+
+    __tablename__ = "TB_CATEGORY"
+
+    id = Column("ID", Integer, primary_key=True)
+    name = Column("CATEGORY_NAME", String, unique=True)
+
+    tour_point = relationship("TourPoint", back_populates="category")
+
+    def __init__(self, name: str):
+        self.name = name
 
 
-class TourPoint(Base, ModelPattern):
+class TourPoint(Base):
 
     __tablename__ = "TB_TOUR_POINT"
 
     id = Column("ID", Integer, primary_key=True)
     name = Column("POINT_NAME", String)
-    # category = Column("POINT_CATEGORY")
     created_at = Column("CREATED_AT", DateTime)
-    user_id = Column("USER_ID", Integer, ForeignKey('TB_USER.ID'))
+    user_id = Column("USER_ID", Integer, ForeignKey('TB_USER.ID'), nullable=True)
 
-    def __init__(self, name):
+    category_id = Column("POINT_CATEGORY_ID", Integer, ForeignKey('TB_CATEGORY.ID'), nullable=True)
+    category = relationship("Category", uselist=False, back_populates="tour_point")
+
+    def __init__(self, name: str, user_id: int, category: Category):
         self.name = name
         self.created_at = dt.datetime.now()
+        self.category = category
+        self.user_id = user_id
 
 
 Base.metadata.create_all(engine)
 
-user = User(name='Teste', email='teste@teste.com', password='1234')
-# userT = User(name='Teste01', email='teste@teste.com', password='1234')
+# restaurante = Category(name='Restaurante')
+# mouseu = Category(name='Mouseu')
 #
-# aqui = TourPoint(name='Aqui do lado')
-# ali = TourPoint(name='Ali do lado')
+# session.add(restaurante)
+# session.add(mouseu)
+# session.commit()
 #
-# user.list_tour_points.append(aqui)
-# user.list_tour_points.append(ali)
-# user.create(user)
+# user1 = User(name='Teste01', email='teste01@teste.com', password='1234')
+# user2 = User(name='Teste02', email='teste02@teste.com', password='4321')
 #
-# ali = TourPoint(name='Ali do lado')
-# userT.list_tour_points.append(ali)
-# userT.create(userT)
+# session.add(user1)
+# session.add(user2)
+# session.commit()
+#
+# tour_point1 = TourPoint(name='Aqui', user_id=user1.id, category=restaurante)
+# tour_point2 = TourPoint(name='Ali', user_id=user2.id, category=mouseu)
+#
+# session.add(tour_point1)
+# session.add(tour_point2)
+# session.commit()
 
-# schema = schemas.UserSchema()
-# result = schema.dump(user)
+
+
