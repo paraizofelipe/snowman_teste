@@ -1,29 +1,32 @@
-from snowman_teste.models import User, Authenticator, TourPoint, Category, session
 from marshmallow import Schema, fields
-from marshmallow_sqlalchemy import ModelSchema
 
 
-class AuthenticatorSchema(ModelSchema):
-    class Meta:
-        model = Authenticator
-        sql_session = session
+class AuthenticatorSchema(Schema):
+        # id = fields.Integer()
+        created_at = fields.DateTime()
+        api_token = fields.String()
+        salt = fields.String()
 
 
-class CategorySchema(ModelSchema, Schema):
-    class Meta:
-        model = Category
-        sql_session = session
+# class CategorySchema(Schema):
+#         # id = fields.Integer()
+#         created_at = fields.DateTime()
+#         name = fields.String()
 
 
-class TourPointSchema(ModelSchema, Schema):
-    class Meta:
-        model = TourPoint
-        category = fields.Nested(CategorySchema, many=True)
-        sql_session = session
+class TourPointSchema(Schema):
+        # id = fields.Integer()
+        created_at = fields.DateTime()
+        name = fields.String(required=True)
+        category = fields.String(required=True)
 
 
-class UserSchema(ModelSchema):
-    class Meta:
-        model = User
-        sql_session = session
+class UserSchema(Schema):
+        # id = fields.Integer()
+        created_at = fields.DateTime()
+        name = fields.String(required=True)
+        email = fields.Email(required=True)
+        password = fields.String(required=True)
+        authenticator = fields.Nested(AuthenticatorSchema)
+        tour_poits = fields.Nested(TourPointSchema, many=True)
 
