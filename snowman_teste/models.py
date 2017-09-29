@@ -3,7 +3,8 @@ import jwt
 import hashlib
 import googlemaps
 import datetime as dt
-from snowman_teste.utils import hash_password, get_conf_key
+from snowman_teste.project import CONFIG
+from snowman_teste.utils import hash_password
 from sqlalchemy import Column, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship, scoped_session
@@ -14,7 +15,7 @@ engine = create_engine("sqlite:///snowman.db", echo=False)
 Session = scoped_session(sessionmaker(bind=engine))
 Base = declarative_base(engine)
 
-gmaps = googlemaps.Client(key=get_conf_key('api')['google_key'])
+gmaps = googlemaps.Client(key=CONFIG['api']['google_key'])
 
 
 class Authenticator(Base):
@@ -25,10 +26,10 @@ class Authenticator(Base):
     api_token = Column("API_TOKEN", String)
     salt = Column("SALT", String)
 
-    user = relationship("User", back_populates="authenticator")
+    user = relationship("User", uselist=False, back_populates="authenticator")
 
     def __init__(self, payload=None):
-        self.api_token = jwt.encode(payload=payload, key=get_conf_key('auth')['secret'], algorithm='HS256')
+        self.api_token = jwt.encode(payload=payload, key=CONFIG['auth']['secret'], algorithm='HS256')
         self.salt = hashlib.sha512(str(os.urandom(64)).encode('utf-8')).hexdigest()
 
 
@@ -45,7 +46,7 @@ class User(Base):
     authenticator_id = Column("USER_AUTH_ID", Integer, ForeignKey('TB_AUTH.ID'))
     authenticator = relationship("Authenticator", uselist=False, back_populates="user")
 
-    list_tour_points = relationship("TourPoint", backref='TB_USER', lazy="subquery")
+    list_tour_points = relationship("TourPoint", back_populates="user", lazy="subquery")
 
     def __init__(self, name, email, password):
         self.created_at = dt.datetime.now()
@@ -62,10 +63,19 @@ class Category(Base):
     id = Column("ID", Integer, primary_key=True)
     name = Column("CATEGORY_NAME", String, unique=True, nullable=False)
 
-    tour_point = relationship("TourPoint", back_populates="category")
+    tour_point = relationship("TourPoint", uselist=False, back_populates="category")
 
     def __init__(self, name):
         self.name = name
+
+
+class Access(Base):
+
+    __tablename__ = "TB_ACCESS"
+
+    id = Column("ID", Integer, primary_key=True)
+    name = Column("ACCESS_NAME", String, unique=True, nullable=False)
+    tour_point = relationship("TourPoint", uselist=False, back_populates="access")
 
 
 class TourPoint(Base):
@@ -75,12 +85,15 @@ class TourPoint(Base):
     id = Column("ID", Integer, primary_key=True)
     name = Column("POINT_NAME", String)
     created_at = Column("CREATED_AT", DateTime)
-    user_id = Column("USER_ID", Integer, ForeignKey('TB_USER.ID'), nullable=False)
     latitude = Column("POINT_LATITUDE", Float, nullable=False)
     longitude = Column("POINT_LONGITUDE", Float, nullable=False)
+    user_id = Column("USER_ID", Integer, ForeignKey('TB_USER.ID'), nullable=False)
+    user = relationship("User", uselist=False, back_populates="list_tour_points")
     category_id = Column("POINT_CATEGORY_ID", Integer, ForeignKey('TB_CATEGORY.ID'), nullable=False)
     category = relationship("Category", uselist=False, back_populates="tour_point")
     address = Column("POINT_ADDRESS", String)
+    access_id = Column("POINT_ACESS", Integer, ForeignKey("TB_ACCESS.ID"), nullable=False)
+    access = relationship("Access", uselist=False, back_populates="tour_point")
 
     def __init__(self, name, user_id, latitude, longitude, category):
         self.name = name

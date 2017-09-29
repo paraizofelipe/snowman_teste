@@ -1,14 +1,12 @@
 from snowman_teste.models import User, Authenticator, TourPoint, Category, Session
 from marshmallow import fields
-from marshmallow_sqlalchemy import ModelSchema
+from marshmallow_sqlalchemy import ModelSchema, field_for
 
 
 class AuthenticatorSchema(ModelSchema):
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs, exclude=('user',))
-
     class Meta:
+        exclude = ('salt',)
         model = Authenticator
         sql_session = Session
 
@@ -19,23 +17,21 @@ class CategorySchema(ModelSchema):
         sql_session = Session
 
 
-class TourPointSchema(ModelSchema):
-
-    class Meta:
-        model = TourPoint
-        sql_session = Session
-
-
 class UserSchema(ModelSchema):
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs, exclude=('password',))
-
-    authenticator = fields.Nested(AuthenticatorSchema, exclude=('salt',))
+    authenticator = fields.Nested(AuthenticatorSchema, exclude=('user',))
 
     class Meta:
-
+        exclude = ("password",)
         model = User
         sql_session = Session
 
 
+class TourPointSchema(ModelSchema):
+
+    category = fields.Nested(CategorySchema, only=('name',))
+    user = fields.Nested(UserSchema, exclude=('authenticator',))
+
+    class Meta:
+        model = TourPoint
+        sql_session = Session

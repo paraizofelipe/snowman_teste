@@ -3,7 +3,7 @@ import googlemaps
 from snowman_teste.resources.pattern_api import api_crud
 from snowman_teste.models import TourPoint, User, Session
 from snowman_teste.schemas import TourPointSchema
-from snowman_teste.utils import get_conf_key
+from snowman_teste.project import CONFIG
 
 CRUD = api_crud(TourPoint, TourPointSchema)
 
@@ -11,7 +11,7 @@ CRUD = api_crud(TourPoint, TourPointSchema)
 class TourPointApi(CRUD):
 
     def __init__(self):
-        self.gmaps = googlemaps.Client(key=get_conf_key('api')['google_key'])
+        self.gmaps = googlemaps.Client(key=CONFIG['api']['google_key'])
 
     @hug.object.get('{id_model}/users/{id_user}')
     def get_point_by_user(self, id_model, id_user):
