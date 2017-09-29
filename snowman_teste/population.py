@@ -16,8 +16,9 @@ Session.add(user1)
 Session.add(user2)
 Session.commit()
 
-tour_point1 = TourPoint(name='Aqui', user_id=user1.id, category=restaurante)
-tour_point2 = TourPoint(name='Ali', user_id=user2.id, category=mouseu)
+tour_point1 = TourPoint(name='Aqui', latitude=-25.4330467, longitude=-49.2798088, user_id=user1.id, category=restaurante)
+
+tour_point2 = TourPoint(name='Ali', latitude=-25.410174, longitude=-49.26695470000001, user_id=user2.id, category=mouseu)
 
 Session.add(tour_point1)
 Session.add(tour_point2)

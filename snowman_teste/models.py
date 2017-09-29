@@ -1,18 +1,20 @@
 import os
 import jwt
 import hashlib
+import googlemaps
 import datetime as dt
-from snowman_teste.utils import hash_password
+from snowman_teste.utils import hash_password, get_conf_key
 from sqlalchemy import Column, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship, scoped_session
-from sqlalchemy import ForeignKey, Integer, String, DateTime
+from sqlalchemy import ForeignKey, Integer, String, DateTime, Float
 
 
 engine = create_engine("sqlite:///snowman.db", echo=False)
 Session = scoped_session(sessionmaker(bind=engine))
-# data_base = session()
 Base = declarative_base(engine)
+
+gmaps = googlemaps.Client(key=get_conf_key('api')['google_key'])
 
 
 class Authenticator(Base):
@@ -26,7 +28,7 @@ class Authenticator(Base):
     user = relationship("User", back_populates="authenticator")
 
     def __init__(self, payload=None):
-        self.api_token = jwt.encode(payload=payload, key="serial-do-windows-xp", algorithm='HS256')
+        self.api_token = jwt.encode(payload=payload, key=get_conf_key('auth')['secret'], algorithm='HS256')
         self.salt = hashlib.sha512(str(os.urandom(64)).encode('utf-8')).hexdigest()
 
 
@@ -45,7 +47,7 @@ class User(Base):
 
     list_tour_points = relationship("TourPoint", backref='TB_USER', lazy="subquery")
 
-    def __init__(self, name: str, email: str, password: str):
+    def __init__(self, name, email, password):
         self.created_at = dt.datetime.now()
         self.name = name
         self.email = email
@@ -62,7 +64,7 @@ class Category(Base):
 
     tour_point = relationship("TourPoint", back_populates="category")
 
-    def __init__(self, name: str):
+    def __init__(self, name):
         self.name = name
 
 
@@ -73,37 +75,19 @@ class TourPoint(Base):
     id = Column("ID", Integer, primary_key=True)
     name = Column("POINT_NAME", String)
     created_at = Column("CREATED_AT", DateTime)
-    user_id = Column("USER_ID", Integer, ForeignKey('TB_USER.ID'), nullable=True)
-
-    category_id = Column("POINT_CATEGORY_ID", Integer, ForeignKey('TB_CATEGORY.ID'), nullable=True)
+    user_id = Column("USER_ID", Integer, ForeignKey('TB_USER.ID'), nullable=False)
+    latitude = Column("POINT_LATITUDE", Float, nullable=False)
+    longitude = Column("POINT_LONGITUDE", Float, nullable=False)
+    category_id = Column("POINT_CATEGORY_ID", Integer, ForeignKey('TB_CATEGORY.ID'), nullable=False)
     category = relationship("Category", uselist=False, back_populates="tour_point")
+    address = Column("POINT_ADDRESS", String)
 
-    def __init__(self, name: str, user_id: int, category: Category):
+    def __init__(self, name, user_id, latitude, longitude, category):
         self.name = name
         self.created_at = dt.datetime.now()
         self.category = category
         self.user_id = user_id
-
-# restaurante = Category(name='Restaurante')
-# mouseu = Category(name='Mouseu')
-#
-# session.add(restaurante)
-# session.add(mouseu)
-# session.commit()
-#
-# user1 = User(name='Teste01', email='teste01@teste.com', password='1234')
-# user2 = User(name='Teste02', email='teste02@teste.com', password='4321')
-#
-# session.add(user1)
-# session.add(user2)
-# session.commit()
-#
-# tour_point1 = TourPoint(name='Aqui', user_id=user1.id, category=restaurante)
-# tour_point2 = TourPoint(name='Ali', user_id=user2.id, category=mouseu)
-#
-# session.add(tour_point1)
-# session.add(tour_point2)
-# session.commit()
-
-
-
+        self.latitude = latitude
+        self.longitude = longitude
+        geocode = gmaps.reverse_geocode((latitude, longitude))[0]
+        self.address = geocode['formatted_address']

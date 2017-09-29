@@ -5,6 +5,9 @@ from marshmallow_sqlalchemy import ModelSchema
 
 class AuthenticatorSchema(ModelSchema):
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs, exclude=('user',))
+
     class Meta:
         model = Authenticator
         sql_session = Session
@@ -25,9 +28,13 @@ class TourPointSchema(ModelSchema):
 
 class UserSchema(ModelSchema):
 
-    authenticator = fields.Nested(AuthenticatorSchema, exclude=('password', 'user'))
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs, exclude=('password',))
+
+    authenticator = fields.Nested(AuthenticatorSchema, exclude=('salt',))
 
     class Meta:
+
         model = User
         sql_session = Session
 
