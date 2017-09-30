@@ -13,4 +13,4 @@ RUN pip3 install gunicorn
 RUN pip3 install -r requirements.txt \
     && python snowman_teste/create_base.py
 
-CMD gunicorn --reload --bind=0.0.0.0:8000 snowman_teste.server:__hug_wsgi__
+CMD python3 snowman_teste/run.py

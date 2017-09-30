@@ -20,17 +20,16 @@ dependency_links = [x.strip().replace('-e ', '') for x in all_reqs if x.startswi
 for pkg in dependency_links:
     install_requires.append(re.findall(r'.*/(.*?)\.git', pkg)[0])
 
+
 setup(
     name='snowman_teste',
     version=__version__,
-    description='Avaliação para Snowman',
+    description='Teste para Snowman',
     long_description=long_description,
     url='https://github.com/paraizofelipe/snowman_teste',
     download_url='https://github.com/paraizofelipe/snowman_teste/tarball/' + __version__,
     license='BSD',
     classifiers=[
-        'Development Status :: 3 - Alpha',
-        'Intended Audience :: Developers',
         'Programming Language :: Python :: 3',
     ],
     keywords='',
