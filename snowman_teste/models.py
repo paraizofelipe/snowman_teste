@@ -10,10 +10,13 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship, scoped_session
 from sqlalchemy import ForeignKey, Integer, String, DateTime, Float
 
+from snowman_teste.project import PATH
 
-engine = create_engine("sqlite:///snowman.db", echo=False)
+engine = create_engine("sqlite:///{}/snowman.db".format(PATH), echo=False)
 Session = scoped_session(sessionmaker(bind=engine))
 Base = declarative_base(engine)
+
+print(engine.url)
 
 gmaps = googlemaps.Client(key=CONFIG['api']['google_key'])
 
@@ -75,7 +78,11 @@ class Access(Base):
 
     id = Column("ID", Integer, primary_key=True)
     name = Column("ACCESS_NAME", String, unique=True, nullable=False)
+
     tour_point = relationship("TourPoint", uselist=False, back_populates="access")
+
+    def __init__(self, name):
+        self.name = name
 
 
 class TourPoint(Base):
@@ -91,16 +98,17 @@ class TourPoint(Base):
     user = relationship("User", uselist=False, back_populates="list_tour_points")
     category_id = Column("POINT_CATEGORY_ID", Integer, ForeignKey('TB_CATEGORY.ID'), nullable=False)
     category = relationship("Category", uselist=False, back_populates="tour_point")
-    address = Column("POINT_ADDRESS", String)
     access_id = Column("POINT_ACESS", Integer, ForeignKey("TB_ACCESS.ID"), nullable=False)
     access = relationship("Access", uselist=False, back_populates="tour_point")
+    address = Column("POINT_ADDRESS", String)
 
-    def __init__(self, name, user_id, latitude, longitude, category):
+    def __init__(self, name, user_id, latitude, longitude, access, category):
         self.name = name
         self.created_at = dt.datetime.now()
         self.category = category
         self.user_id = user_id
         self.latitude = latitude
         self.longitude = longitude
+        self.access = access
         geocode = gmaps.reverse_geocode((latitude, longitude))[0]
         self.address = geocode['formatted_address']

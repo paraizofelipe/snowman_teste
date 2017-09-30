@@ -1,4 +1,5 @@
 import hug
+import traceback
 from falcon import HTTP_400, HTTP_500, HTTP_404
 from snowman_teste.models import Session
 from sqlalchemy.orm.exc import NoResultFound
@@ -15,9 +16,10 @@ def api_crud(model_class, schema_class):
                 list_user = Session.query(model_class).all()
                 result, erros = schema.dump(list_user)
                 return result
-            except Exception as error:
+            except Exception:
                 response.status = {"error": HTTP_500}
-                raise error
+                traceback.print_exc()
+                return {"error": HTTP_500}
 
         @hug.object.get(urls='{id_model}')
         def get_by_id(self, id_model, response):
@@ -28,10 +30,12 @@ def api_crud(model_class, schema_class):
                 return result
             except NoResultFound:
                 response.status = HTTP_404
+                traceback.print_exc()
                 return {"error": HTTP_404}
-            except Exception as error:
-                response.status = {"error": HTTP_500}
-                raise error
+            except Exception:
+                response.status = HTTP_500
+                traceback.print_exc()
+                return {"error": HTTP_500}
 
         @hug.object.post()
         def add(self, body, response):
@@ -42,12 +46,14 @@ def api_crud(model_class, schema_class):
                 Session.commit()
                 result, erros = schema.dump(user)
                 return result
-            except KeyError as error:
-                response.status = {"error": HTTP_400}
-                raise error
-            except Exception as error:
-                response.status = {"error": HTTP_500}
-                raise error
+            except KeyError:
+                response.status = HTTP_400
+                traceback.print_exc()
+                return {"error": HTTP_400}
+            except Exception:
+                response.status = HTTP_500
+                traceback.print_exc()
+                return {"error": HTTP_500}
 
         @hug.object.delete('{id_model}')
         def remove(self, id_model, response):
@@ -57,10 +63,12 @@ def api_crud(model_class, schema_class):
                 return {}
             except NoResultFound:
                 response.status = HTTP_404
+                traceback.print_exc()
                 return {"error": HTTP_404}
-            except Exception as error:
+            except Exception:
                 response.status = HTTP_500
-                raise error
+                traceback.print_exc()
+                return {"error": HTTP_500}
 
         @hug.object.put()
         def update(self):

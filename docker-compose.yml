@@ -1,0 +1,21 @@
+version: '2'
+services:
+    prod:
+        build:
+            context: ./
+            dockerfile: docker/prod/Dockerfile
+        image: paraizo/snowman_teste
+        container_name: api-snowman-teste
+        ports:
+            - "8000:8000"
+
+    dev:
+        build:
+            context: ./
+            dockerfile: docker/dev/Dockerfile
+        image: paraido/snowman_teste_workstation
+        container_name: api-snowman-teste-dev
+        volumes:
+          - .:/src
+        ports:
+            - "8000:8000"

@@ -1,13 +1,7 @@
-# Dev/Deployment
-sphinx
-sphinx_rtd_theme
-nose
-coverage
-pypi-publisher
 hug
 googlemaps
 PyJWT
-marshmallow
 python-dateutil
 marshmallow-sqlalchemy
+marshmallow
 SQLAlchemy
