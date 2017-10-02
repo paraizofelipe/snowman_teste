@@ -29,15 +29,15 @@ tour_point1 = TourPoint(name='Aqui',
                         latitude=-25.4330467,
                         longitude=-49.2798088,
                         user_id=user1.id,
-                        access=public,
-                        category=restaurante)
+                        access_id=public.id,
+                        category_id=restaurante.id)
 
 tour_point2 = TourPoint(name='Ali',
                         latitude=-25.410174,
                         longitude=-49.26695470000001,
                         user_id=user2.id,
-                        access=private,
-                        category=mouseu)
+                        access_id=private.id,
+                        category_id=mouseu.id)
 
 Session.add(tour_point1)
 Session.add(tour_point2)

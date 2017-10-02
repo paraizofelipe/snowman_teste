@@ -2,8 +2,6 @@ import hug
 
 from snowman_teste.resources.user import UserApi
 from snowman_teste.resources.tour_point import TourPointApi
-from snowman_teste.resources.authentication import AuthenticatorApi
-from snowman_teste.resources.category import CategoryApi
 
 
 def create_api():
@@ -13,7 +11,5 @@ def create_api():
     routes = hug.route.API(__name__)
     routes.object(urls='/tour_points')(TourPointApi)
     routes.object(urls='/users')(UserApi)
-    routes.object(urls='/auths')(AuthenticatorApi)
-    routes.object(urls='/categorys')(CategoryApi)
 
     return api

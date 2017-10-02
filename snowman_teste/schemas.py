@@ -36,9 +36,6 @@ class UserSchema(ModelSchema):
 
 class TourPointSchema(ModelSchema):
 
-    category = fields.Nested(CategorySchema, only=('name',))
-    user = fields.Nested(UserSchema, exclude=('authenticator',))
-    access = fields.Nested(AccessSchema, only=('name',))
 
     class Meta:
         model = TourPoint

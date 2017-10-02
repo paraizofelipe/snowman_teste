@@ -102,13 +102,13 @@ class TourPoint(Base):
     access = relationship("Access", uselist=False, back_populates="tour_point")
     address = Column("POINT_ADDRESS", String)
 
-    def __init__(self, name, user_id, latitude, longitude, access, category):
+    def __init__(self, name, user_id, latitude, longitude, access_id, category_id):
         self.name = name
         self.created_at = dt.datetime.now()
-        self.category = category
+        self.category_id = category_id
         self.user_id = user_id
         self.latitude = latitude
         self.longitude = longitude
-        self.access = access
+        self.access_id = access_id
         geocode = gmaps.reverse_geocode((latitude, longitude))[0]
         self.address = geocode['formatted_address']

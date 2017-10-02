@@ -5,14 +5,11 @@ from sqlalchemy.orm.exc import NoResultFound
 from falcon import HTTP_500, HTTP_400, HTTP_401, HTTP_404
 from snowman_teste.settings import CONFIG
 from snowman_teste.utils import hash_password, token_verify
-from snowman_teste.resources.pattern_api import api_crud
 from snowman_teste.models import User, TourPoint, Session
 from snowman_teste.schemas import UserSchema, AuthenticatorSchema, TourPointSchema
 
-CRUD = api_crud(User, UserSchema)
 
-
-class UserApi(CRUD):
+class UserApi:
 
     token_key_authentication = hug.authentication.token(token_verify)
 
