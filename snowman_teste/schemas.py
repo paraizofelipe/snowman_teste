@@ -6,6 +6,7 @@ from snowman_teste.models import Access, User, Authenticator, TourPoint, Categor
 class AuthenticatorSchema(ModelSchema):
 
     class Meta:
+        exclude = ('id', 'user')
         load_only = ('salt',)
         model = Authenticator
         sql_session = Session

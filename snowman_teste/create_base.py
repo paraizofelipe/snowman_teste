@@ -18,7 +18,7 @@ Session.add(public)
 Session.add(private)
 Session.commit()
 
-user1 = User(name='Teste01', email='teste01@teste.com', password='1234')
+user1 = User(name='Teste01', email='teste01@teste.com', password='123')
 user2 = User(name='Teste02', email='teste02@teste.com', password='4321')
 
 Session.add(user1)

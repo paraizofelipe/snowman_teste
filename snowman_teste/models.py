@@ -3,14 +3,14 @@ import jwt
 import hashlib
 import googlemaps
 import datetime as dt
-from snowman_teste.project import CONFIG
+from snowman_teste.settings import CONFIG
 from snowman_teste.utils import hash_password
 from sqlalchemy import Column, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship, scoped_session
 from sqlalchemy import ForeignKey, Integer, String, DateTime, Float
 
-from snowman_teste.project import PATH
+from snowman_teste.settings import PATH
 
 engine = create_engine("sqlite:///{}/snowman.db".format(PATH), echo=False)
 Session = scoped_session(sessionmaker(bind=engine))
@@ -55,7 +55,7 @@ class User(Base):
         self.created_at = dt.datetime.now()
         self.name = name
         self.email = email
-        self.authenticator = Authenticator({'email': self.email, 'payload': 'pizza'})
+        self.authenticator = Authenticator({'email': self.email})
         self.password = hash_password(password, self.authenticator.salt)
 
 
