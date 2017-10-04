@@ -8,7 +8,8 @@ from snowman_teste.utils import hash_password
 from sqlalchemy import Column, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship, scoped_session
-from sqlalchemy import ForeignKey, Integer, String, DateTime, Float
+from sqlalchemy import ForeignKey, Integer, String, DateTime, Float, Boolean
+from sqlalchemy_utils import ChoiceType
 
 from snowman_teste.settings import PATH
 
@@ -59,36 +60,16 @@ class User(Base):
         self.password = hash_password(password, self.authenticator.salt)
 
 
-class Category(Base):
-
-    __tablename__ = "TB_CATEGORY"
-
-    id = Column("ID", Integer, primary_key=True)
-    name = Column("CATEGORY_NAME", String, unique=True, nullable=False)
-
-    tour_point = relationship("TourPoint", uselist=False, back_populates="category")
-
-    def __init__(self, name):
-        self.name = name
-
-
-class Access(Base):
-
-    __tablename__ = "TB_ACCESS"
-
-    id = Column("ID", Integer, primary_key=True)
-    name = Column("ACCESS_NAME", String, unique=True, nullable=False)
-
-    tour_point = relationship("TourPoint", uselist=False, back_populates="access")
-
-    def __init__(self, name):
-        self.name = name
-
-
 class TourPoint(Base):
-
+    
+    CATEGORY = [
+        (u'museum', u'museum'),
+        (u'park', u'park'),
+        (u'restaurant', u'restaurant')
+    ]
+    
     __tablename__ = "TB_TOUR_POINT"
-
+    
     id = Column("ID", Integer, primary_key=True)
     name = Column("POINT_NAME", String)
     created_at = Column("CREATED_AT", DateTime)
@@ -96,19 +77,17 @@ class TourPoint(Base):
     longitude = Column("POINT_LONGITUDE", Float, nullable=False)
     user_id = Column("USER_ID", Integer, ForeignKey('TB_USER.ID'), nullable=False)
     user = relationship("User", uselist=False, back_populates="list_tour_points")
-    category_id = Column("POINT_CATEGORY_ID", Integer, ForeignKey('TB_CATEGORY.ID'), nullable=False)
-    category = relationship("Category", uselist=False, back_populates="tour_point")
-    access_id = Column("POINT_ACESS", Integer, ForeignKey("TB_ACCESS.ID"), nullable=False)
-    access = relationship("Access", uselist=False, back_populates="tour_point")
+    category = Column(ChoiceType(CATEGORY), nullable=False)
+    public = Column("POINT_PUBliC", Boolean, default=True)
     address = Column("POINT_ADDRESS", String)
 
-    def __init__(self, name, user_id, latitude, longitude, access_id, category_id):
+    def __init__(self, name, user_id, latitude, longitude, public, category):
         self.name = name
         self.created_at = dt.datetime.now()
-        self.category_id = category_id
+        self.category = category
         self.user_id = user_id
         self.latitude = latitude
         self.longitude = longitude
-        self.access_id = access_id
+        self.public = public
         geocode = gmaps.reverse_geocode((latitude, longitude))[0]
         self.address = geocode['formatted_address']

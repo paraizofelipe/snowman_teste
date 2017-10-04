@@ -16,6 +16,12 @@ def hash_password(password, salt):
 
 
 def token_verify(token):
+    """
+    Função para verificar token JWT
+    :param password:
+    :param salt:
+    :return: Codificação hash Hex SHA512 da senha fornecida
+    """
     try:
         return jwt.decode(token, CONFIG['auth']['secret'], algorithm='HS256')
     except jwt.DecodeError:

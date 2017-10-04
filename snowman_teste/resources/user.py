@@ -10,11 +10,26 @@ from snowman_teste.schemas import UserSchema, AuthenticatorSchema, TourPointSche
 
 
 class UserApi:
+    """
+    Classe contendo os metodos URIs para o endpoint users.
+    """
 
     token_key_authentication = hug.authentication.token(token_verify)
 
     def __init__(self):
         self.gmaps = googlemaps.Client(key=CONFIG['api']['google_key'])
+
+    @hug.object.post()
+    def add(self, body, response):
+        try:
+            user_schema = UserSchema()
+            user, errors = user_schema.load(body, session=Session)
+            Session.add(user)
+            Session.commit()
+            user_dict, errors = user_schema.dump(user)
+            return user_dict
+        except Exception as error:
+            raise error
 
     @hug.object.post('login')
     def login(self, body, response):

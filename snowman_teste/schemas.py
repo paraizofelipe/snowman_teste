@@ -1,6 +1,6 @@
 from marshmallow import fields
 from marshmallow_sqlalchemy import ModelSchema, field_for
-from snowman_teste.models import Access, User, Authenticator, TourPoint, Category, Session
+from snowman_teste.models import User, Authenticator, TourPoint, Session
 
 
 class AuthenticatorSchema(ModelSchema):
@@ -9,18 +9,6 @@ class AuthenticatorSchema(ModelSchema):
         exclude = ('id', 'user')
         load_only = ('salt',)
         model = Authenticator
-        sql_session = Session
-
-
-class CategorySchema(ModelSchema):
-    class Meta:
-        model = Category
-        sql_session = Session
-
-
-class AccessSchema(ModelSchema):
-    class Meta:
-        model = Access
         sql_session = Session
 
 
@@ -35,7 +23,6 @@ class UserSchema(ModelSchema):
 
 
 class TourPointSchema(ModelSchema):
-
 
     class Meta:
         model = TourPoint
