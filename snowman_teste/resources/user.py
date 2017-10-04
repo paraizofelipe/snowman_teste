@@ -38,10 +38,10 @@ class UserApi:
     @hug.object.get('tour_points', requires=token_key_authentication)
     def get_point_by_user(self, user_req: hug.directives.user, response):
         try:
-            schema = UserSchema()
+            tour_point_schema = TourPointSchema()
             user = Session.query(User).filter_by(email=user_req['email']).one()
             list_tour_points = Session.query(TourPoint).filter_by(id=user.id).all()
-            result, erros = schema.dump(list_tour_points, many=True)
+            result, erros = tour_point_schema.dump(list_tour_points, many=True)
             return result
         except NoResultFound as error:
             response.status = HTTP_404
@@ -71,6 +71,7 @@ class UserApi:
                 distance = matrix['rows'][0]['elements'][0]['distance']['value']
                 if distance < 5000:
                     list_near.append(tour_point)
+
             result, erros = tour_point_schema.dump(list_near)
             return result
         except Exception as error:
