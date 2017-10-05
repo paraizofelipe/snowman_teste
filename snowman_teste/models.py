@@ -43,7 +43,7 @@ class User(Base):
 
     id = Column("ID", Integer, primary_key=True)
     created_at = Column("CREATED_AT", DateTime)
-    name = Column("USER_NAME", String, nullable=False)
+    name = Column("USER_NAME", String)
     email = Column("USER_EMAIL", String, unique=True, nullable=False)
     password = Column("USER_PASSWORD", String, nullable=False)
 
@@ -52,9 +52,8 @@ class User(Base):
 
     list_tour_points = relationship("TourPoint", back_populates="user", lazy="subquery")
 
-    def __init__(self, name, email, password):
+    def __init__(self, email, password):
         self.created_at = dt.datetime.now()
-        self.name = name
         self.email = email
         self.authenticator = Authenticator({'email': self.email})
         self.password = hash_password(password, self.authenticator.salt)
@@ -71,21 +70,20 @@ class TourPoint(Base):
     __tablename__ = "TB_TOUR_POINT"
     
     id = Column("ID", Integer, primary_key=True)
-    name = Column("POINT_NAME", String)
+    name = Column("POINT_NAME", String, unique=True)
     created_at = Column("CREATED_AT", DateTime)
     latitude = Column("POINT_LATITUDE", Float, nullable=False)
     longitude = Column("POINT_LONGITUDE", Float, nullable=False)
-    user_id = Column("USER_ID", Integer, ForeignKey('TB_USER.ID'), nullable=False)
+    user_id = Column("USER_ID", Integer, ForeignKey('TB_USER.ID'))
     user = relationship("User", uselist=False, back_populates="list_tour_points")
     category = Column(ChoiceType(CATEGORY), nullable=False)
     public = Column("POINT_PUBliC", Boolean, default=True)
     address = Column("POINT_ADDRESS", String)
 
-    def __init__(self, name, user_id, latitude, longitude, public, category):
+    def __init__(self, name, latitude, longitude, public, category):
         self.name = name
         self.created_at = dt.datetime.now()
         self.category = category
-        self.user_id = user_id
         self.latitude = latitude
         self.longitude = longitude
         self.public = public
