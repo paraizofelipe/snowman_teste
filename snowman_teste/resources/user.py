@@ -21,7 +21,7 @@ class UserApi:
         self.gmaps = googlemaps.Client(key=CONFIG['api']['google_key'])
 
     @hug.object.post()
-    def add(self, body: AlchemyMarshSchema(UserSchema, Session)):
+    def add_user(self, body: AlchemyMarshSchema(UserSchema, Session)):
         try:
             user_schema = UserSchema()
             Session.add(body)
@@ -52,7 +52,7 @@ class UserApi:
             return {"error": HTTP_500}
 
     @hug.object.post('tour_points', requires=token_key_authentication)
-    def add(self, body: AlchemyMarshSchema(TourPointSchema, Session), payload: hug.directives.user, response):
+    def add_tour_point(self, body: AlchemyMarshSchema(TourPointSchema, Session), payload: hug.directives.user, response):
         """
         Metodo para adicionar novos pontos de passeio para um usuário autenticado.
         :param body:
