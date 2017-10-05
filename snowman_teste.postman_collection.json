@@ -1,0 +1,155 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Snowman Teste",
+		"_postman_id": "3a74381a-fa33-404c-fb56-64d2542924f1",
+		"description": "Avaliação para a SnowmanLabs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "tour_poits",
+			"description": "",
+			"item": [
+				{
+					"name": "http://localhost:8000/tour_points",
+					"request": {
+						"url": "http://localhost:8000/tour_points",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Lista todos os restaurantes disponiveis"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "users",
+			"description": "",
+			"item": [
+				{
+					"name": "http://localhost:8000/users",
+					"request": {
+						"url": "http://localhost:8000/users",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"teste@teste.com.br\",\n\t\"password\": \"1234\"\n}"
+						},
+						"description": "Adicionar usuario no sistema"
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:8000/users/login",
+					"request": {
+						"url": "http://localhost:8000/users/login",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"teste@teste.com.br\",\n\t\"password\": \"1234\"\n}"
+						},
+						"description": "Logar usuario no sistema"
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:8000/users/tour_points",
+					"request": {
+						"url": "http://localhost:8000/users/tour_points",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RlQHRlc3RlLmNvbS5iciJ9.HjN0OrTa5PbShPkaEQqKhjmxX2GWpgQnvuTcEiYuE94",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Aqui\",\n\t\"latitude\":  -25.428618,\n\t\"longitude\": -49.258505,\n\t\"public\": true,\n\t\"category\": \"park\"\n}"
+						},
+						"description": "Adicionar um ponto de passeio ao usuario logado"
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:8000/users/tour_points",
+					"request": {
+						"url": "http://localhost:8000/users/tour_points",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RlQHRlc3RlLmNvbS5iciJ9.HjN0OrTa5PbShPkaEQqKhjmxX2GWpgQnvuTcEiYuE94",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Aqui\",\n\t\"latitude\":  -25.428618,\n\t\"longitude\": -49.258505,\n\t\"public\": true,\n\t\"category\": \"park\"\n}"
+						},
+						"description": "Retorna a lista de pontos de passeio de um usuario."
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:8000/users/tour_points/11",
+					"request": {
+						"url": "http://localhost:8000/users/tour_points/11",
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RlQHRlc3RlLmNvbS5iciJ9.HjN0OrTa5PbShPkaEQqKhjmxX2GWpgQnvuTcEiYuE94",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": "Retorna a lista de pontos de passeio de um usuario."
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

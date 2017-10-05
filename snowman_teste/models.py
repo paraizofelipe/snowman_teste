@@ -17,8 +17,6 @@ engine = create_engine("sqlite:///{}/snowman.db".format(PATH), echo=False)
 Session = scoped_session(sessionmaker(bind=engine))
 Base = declarative_base(engine)
 
-print(engine.url)
-
 gmaps = googlemaps.Client(key=CONFIG['api']['google_key'])
 
 
