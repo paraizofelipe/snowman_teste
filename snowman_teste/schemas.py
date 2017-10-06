@@ -1,7 +1,7 @@
 from hug.types import MarshmallowSchema
 from hug.exceptions import InvalidTypeData
-from marshmallow import fields
-from marshmallow_sqlalchemy import ModelSchema, field_for
+from marshmallow import fields, validates, ValidationError
+from marshmallow_sqlalchemy import ModelSchema
 from snowman_teste.models import User, Authenticator, TourPoint, Session
 
 
@@ -16,7 +16,12 @@ class AuthenticatorSchema(ModelSchema):
 
 class UserSchema(ModelSchema):
 
-    authenticator = fields.Nested(AuthenticatorSchema, exclude=('user',))
+    exclude = ('authenticator',)
+
+    @validates('email')
+    def validate_unique_email(self, value):
+        if Session.query(User).filter_by(email=value).scalar():
+            raise ValidationError('Email already registered')
 
     class Meta:
         load_only = ("password",)
@@ -26,10 +31,12 @@ class UserSchema(ModelSchema):
 
 class TourPointSchema(ModelSchema):
 
-    # category = fields.Nested('self', only='value')
+    @validates('category')
+    def validate_category(self, value):
+        if value not in ['museum', 'park', 'restaurant']:
+            raise ValidationError('category invalid. Enter one of the options between: museum, park, restaurant')
 
     class Meta:
-        dump_only = ("category.value",)
         model = TourPoint
         sql_session = Session
 

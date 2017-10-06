@@ -22,10 +22,10 @@ class ServerApplication(gunicorn.app.base.BaseApplication):
 
 if __name__ == '__main__':
     API = api.create_api()
-    # options = {
-    #     'reload': True,
-    #     'workers': 2,
-    #     'bind': '{}:{}'.format('0.0.0.0', '8000')
-    # }
-    # ServerApplication(API.module.__hug_wsgi__, options).run()
-    API.http.serve()
+    options = {
+        'reload': True,
+        'workers': 2,
+        'bind': '{}:{}'.format('0.0.0.0', '8000')
+    }
+    ServerApplication(API.module.__hug_wsgi__, options).run()
+    # API.http.serve()

@@ -9,7 +9,6 @@ from sqlalchemy import Column, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship, scoped_session
 from sqlalchemy import ForeignKey, Integer, String, DateTime, Float, Boolean
-from sqlalchemy_utils import ChoiceType
 
 from snowman_teste.settings import PATH
 
@@ -58,13 +57,13 @@ class User(Base):
 
 
 class TourPoint(Base):
-    
+
     CATEGORY = [
-        (u'museum', u'museum'),
-        (u'park', u'park'),
-        (u'restaurant', u'restaurant')
+        ('museum', 'museum'),
+        ('park', 'park'),
+        ('restaurant', 'restaurant')
     ]
-    
+
     __tablename__ = "TB_TOUR_POINT"
     
     id = Column("ID", Integer, primary_key=True)
@@ -74,7 +73,7 @@ class TourPoint(Base):
     longitude = Column("POINT_LONGITUDE", Float, nullable=False)
     user_id = Column("USER_ID", Integer, ForeignKey('TB_USER.ID'))
     user = relationship("User", uselist=False, back_populates="list_tour_points")
-    category = Column(ChoiceType(CATEGORY), nullable=False)
+    category = Column("POINT_CATGORY", String, nullable=False)
     public = Column("POINT_PUBliC", Boolean, default=True)
     address = Column("POINT_ADDRESS", String)
 
