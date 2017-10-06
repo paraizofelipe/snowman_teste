@@ -13,11 +13,11 @@ Tecnologias
 ----------
 * [Python3.5](https://www.python.org/) linguagem de desenvolvimento.
 * [Hug](http://www.hug.rest/) framework de criação de APIs Rest
-* [Docker](https://docs.docker.com)** e **[Docker Compose](https://docs.docker.com/compose/)** para criar os ambientes de produção e desenvolvimento.
-* [GoogleMaps](https://github.com/googlemaps/google-maps-services-python) wrapper para consultada na API de Google Maps.
+* [Docker](https://docs.docker.com) e **[Docker Compose](https://docs.docker.com/compose/)** para criar os ambientes de produção e desenvolvimento.
+* [GoogleMaps](https://github.com/googlemaps/google-maps-services-python) wrapper para consultada na API do Google Maps.
 * [marshmallow](https://marshmallow.readthedocs.io/en/latest/) para serialização de objetos python.
-* [SQLite](https://www.sqlite.org/) para persistencia de dados.
-* [SQLAlchemy](https://www.sqlalchemy.org/)  ORM para consultas ao banco de dados.
+* [SQLite](https://www.sqlite.org/) para persisteência de dados.
+* [SQLAlchemy](https://www.sqlalchemy.org/) ORM para consultas ao banco de dados.
 * [JWT](https://jwt.io/) para autenticação e geração de API tokens.
 
 Instalação / Uso
@@ -34,7 +34,7 @@ na URL **http://localhost:8000**
 Testes
 ------
 Está disponivel para testes via postman o arquivo **snowman_teste.postman_collection.json**, onde consta todas as URIs
-para consulta e manipulação da API.
+para consulta e manipulação da requests.
 
 Caso exista a necessidade de recriar o banco de dados, pode-se executar o script **create-database.py**
 
