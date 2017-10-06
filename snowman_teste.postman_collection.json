@@ -2,7 +2,7 @@
 	"variables": [],
 	"info": {
 		"name": "Snowman Teste",
-		"_postman_id": "3a74381a-fa33-404c-fb56-64d2542924f1",
+		"_postman_id": "58344045-9456-4c58-38aa-8cca4099fea2",
 		"description": "Avaliação para a SnowmanLabs",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
@@ -12,9 +12,9 @@
 			"description": "",
 			"item": [
 				{
-					"name": "http://localhost:8000/tour_points",
+					"name": "Lista todos os restaurantes disponiveis",
 					"request": {
-						"url": "http://localhost:8000/tour_points",
+						"url": "http://localhost:8000/api/v1/tour_points",
 						"method": "GET",
 						"header": [
 							{
@@ -35,9 +35,9 @@
 			"description": "",
 			"item": [
 				{
-					"name": "http://localhost:8000/users",
+					"name": "Adicionar um usuário no sistema",
 					"request": {
-						"url": "http://localhost:8000/users",
+						"url": "http://localhost:8000/api/v1/users",
 						"method": "POST",
 						"header": [
 							{
@@ -50,14 +50,14 @@
 							"mode": "raw",
 							"raw": "{\n\t\"email\": \"teste@teste.com.br\",\n\t\"password\": \"1234\"\n}"
 						},
-						"description": "Adicionar usuario no sistema"
+						"description": "Adicionar um usuário no sistema"
 					},
 					"response": []
 				},
 				{
-					"name": "http://localhost:8000/users/login",
+					"name": "Logar um usuário no sistema",
 					"request": {
-						"url": "http://localhost:8000/users/login",
+						"url": "http://localhost:8000/api/v1/users/login",
 						"method": "POST",
 						"header": [
 							{
@@ -70,14 +70,14 @@
 							"mode": "raw",
 							"raw": "{\n\t\"email\": \"teste@teste.com.br\",\n\t\"password\": \"1234\"\n}"
 						},
-						"description": "Logar usuario no sistema"
+						"description": "Logar um usuário no sistema"
 					},
 					"response": []
 				},
 				{
-					"name": "http://localhost:8000/users/tour_points",
+					"name": "Adicionar um ponto de passeio ao usuário logado",
 					"request": {
-						"url": "http://localhost:8000/users/tour_points",
+						"url": "http://localhost:8000/api/v1/users/tour_points",
 						"method": "POST",
 						"header": [
 							{
@@ -87,22 +87,22 @@
 							},
 							{
 								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RlQHRlc3RlLmNvbS5iciJ9.HjN0OrTa5PbShPkaEQqKhjmxX2GWpgQnvuTcEiYuE94",
+								"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3RlQHRlc3RlLmNvbS5iciJ9.CWK3vIOmpA-Y6Oi69VqBDI-4A-ZX4PP26RLvw42lNJY",
 								"description": ""
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"name\": \"Aqui\",\n\t\"latitude\":  -25.428618,\n\t\"longitude\": -49.258505,\n\t\"public\": true,\n\t\"category\": \"park\"\n}"
+							"raw": "{\n\t\"name\": \"Aqui 2\",\n\t\"latitude\":  -25.428618,\n\t\"longitude\": -49.258505,\n\t\"public\": true,\n\t\"category\": \"park\"\n}"
 						},
-						"description": "Adicionar um ponto de passeio ao usuario logado"
+						"description": "Adicionar um ponto de passeio ao usuário logado"
 					},
 					"response": []
 				},
 				{
-					"name": "http://localhost:8000/users/tour_points",
+					"name": "Lista os ponto do usuário autenticado",
 					"request": {
-						"url": "http://localhost:8000/users/tour_points",
+						"url": "http://localhost:8000/api/v1/users/tour_points",
 						"method": "GET",
 						"header": [
 							{
@@ -112,7 +112,7 @@
 							},
 							{
 								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RlQHRlc3RlLmNvbS5iciJ9.HjN0OrTa5PbShPkaEQqKhjmxX2GWpgQnvuTcEiYuE94",
+								"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImJhcnJvc2ZlbGlwZUBib2wuY29tLmJyIn0.w5oQ7HXu_LfLoBKipGsTg09LDrg06PVd9R5Q-V8BptU",
 								"description": ""
 							}
 						],
@@ -120,14 +120,14 @@
 							"mode": "raw",
 							"raw": "{\n\t\"name\": \"Aqui\",\n\t\"latitude\":  -25.428618,\n\t\"longitude\": -49.258505,\n\t\"public\": true,\n\t\"category\": \"park\"\n}"
 						},
-						"description": "Retorna a lista de pontos de passeio de um usuario."
+						"description": "Lista os ponto do usuário autenticado"
 					},
 					"response": []
 				},
 				{
-					"name": "http://localhost:8000/users/tour_points/11",
+					"name": "Deleta um ponto do usuário logado",
 					"request": {
-						"url": "http://localhost:8000/users/tour_points/11",
+						"url": "http://localhost:8000/api/v1/users/tour_points/11",
 						"method": "DELETE",
 						"header": [
 							{
@@ -137,7 +137,7 @@
 							},
 							{
 								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RlQHRlc3RlLmNvbS5iciJ9.HjN0OrTa5PbShPkaEQqKhjmxX2GWpgQnvuTcEiYuE94",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFsbWVpZGFsdWl6LWZlbGlwZUBub3ZhZXMuYnIifQ.b34eFUkJl7ifKzI8edeqyk6HR2NAdEXZgxg0gKD54r0",
 								"description": ""
 							}
 						],
@@ -145,7 +145,54 @@
 							"mode": "raw",
 							"raw": ""
 						},
-						"description": "Retorna a lista de pontos de passeio de um usuario."
+						"description": "Deleta um ponto do usuário logado"
+					},
+					"response": []
+				},
+				{
+					"name": "Lista todos os pontos de passios no raio de 5km das coordenadas informada",
+					"request": {
+						"url": {
+							"raw": "http://localhost:8000/api/v1/users/near_points?origins=-25.4230441,-49.3084172",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"near_points"
+							],
+							"query": [
+								{
+									"key": "origins",
+									"value": "-25.4230441,-49.3084172",
+									"equals": true,
+									"description": ""
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3RlQHRlc3RlLmNvbS5iciJ9.CWK3vIOmpA-Y6Oi69VqBDI-4A-ZX4PP26RLvw42lNJY",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Aqui\",\n\t\"latitude\":  -25.428618,\n\t\"longitude\": -49.258505,\n\t\"public\": true,\n\t\"category\": \"park\"\n}"
+						},
+						"description": "Lista todos os pontos de passios no raio de 5km das coordenadas informada"
 					},
 					"response": []
 				}
